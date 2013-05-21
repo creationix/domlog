@@ -1,11 +1,14 @@
+"use strict";
+
 var domBuilder = require('dombuilder');
 
-exports.toDom = toDom;
-exports.container = undefined;
-exports.setup = setup;
-exports.log = log;
-exports.css =
-  ".log{background:#222;color:#ddd;font-family:monospace;padding:0}\n" +
+module.exports = log;
+log.toDom = toDom;
+log.container = undefined;
+log.setup = setup;
+log.css =
+  ".log:hover{background:rgba(0,0,0,1);height:100%}\n" +
+  ".log{background:rgba(0,0,0,0.7);color:#ddd;font-family:monospace;padding:0;position:absolute;left:0;right:0;bottom:0;margin:0;height:200px;overflow:auto;transition:all 1s ease-in-out}\n" +
   ".log .array:after{content:']'}\n" +
   ".log .array:before{content:'['}\n" +
   ".log .boolean{color:#f4a}\n" +
@@ -59,10 +62,10 @@ function toDom(val) {
 
 function setup() {
   var style = document.createElement("style");
-  style.textContent = exports.css;
+  style.textContent = log.css;
   document.head.appendChild(style);
-  exports.container = domBuilder(["ul.log"]);
-  document.body.appendChild(exports.container);
+  log.container = domBuilder(["ul.log"]);
+  document.body.appendChild(log.container);
 }
 
 function item(val) {
@@ -71,6 +74,8 @@ function item(val) {
 }
 
 function log() {
-  if (!exports.container) setup();
-  exports.container.appendChild(domBuilder(["li"].concat(Array.prototype.map.call(arguments, item))));
+  if (!log.container) setup();
+  var child = domBuilder(["li"].concat(Array.prototype.map.call(arguments, item)));
+  log.container.appendChild(child);
+  log.container.scrollTop = child.offsetTop;
 }
