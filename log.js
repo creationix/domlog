@@ -12,6 +12,7 @@ log.css =
   ".log .array:after{content:']'}\n" +
   ".log .array:before{content:'['}\n" +
   ".log .boolean{color:#f4a}\n" +
+  ".log .error{color:#f33;white-space:pre-wrap}\n" +
   ".log .function{color:#fb0}\n" +
   ".log .null{color:#aaa;font-weight:bold}\n" +
   ".log .number{color:#5cf}\n" +
@@ -38,6 +39,9 @@ function toDom(val) {
       })
     );
   }
+  if (val instanceof Error) {
+    return [".error", val.stack];
+  }
   var type = typeof val;
   if (type === "object") {
     return ["dl.object"].concat(
@@ -60,11 +64,16 @@ function toDom(val) {
   return ["span", {title: title, class: type}, document.createTextNode(val)];
 }
 
-function setup() {
+function setup(extra) {
   var style = document.createElement("style");
   style.textContent = log.css;
   document.head.appendChild(style);
   log.container = domBuilder(["ul.log"]);
+  if (extra) {
+    for (var key in extra) {
+      log.container.style[key] = extra[key];
+    }
+  }
   document.body.appendChild(log.container);
 }
 
