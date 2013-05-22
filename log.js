@@ -11,6 +11,10 @@ log.css =
   ".log{background:rgba(0,0,0,0.7);color:#ddd;font-family:monospace;padding:0;position:absolute;left:0;right:0;bottom:0;margin:0;height:200px;overflow:auto;transition:all 1s ease-in-out}\n" +
   ".log .array:after{content:']'}\n" +
   ".log .array:before{content:'['}\n" +
+  ".log .binary{color:#88e}\n" +
+  ".log .binary:after{content:'>'}\n" +
+  ".log .binary:before{content:'<'}\n" +
+  ".log .binary:before,.log .binary:after{font-weight:bold;color:#bcf}\n" +
   ".log .boolean{color:#f4a}\n" +
   ".log .error{color:#f33;white-space:pre-wrap}\n" +
   ".log .function{color:#fb0}\n" +
@@ -41,6 +45,16 @@ function toDom(val) {
   }
   if (val instanceof Error) {
     return [".error", val.stack];
+  }
+  if (val instanceof Uint8Array) {
+    var str = val.length.toString(16) + ":";
+    for (var i = 0, l = Math.min(val.length, 25); i < l; i++) {
+      var c = val[i];
+      if (c < 0x10) str += "0" + c.toString(16);
+      else str += c.toString(16);
+    }
+    if (i < val.length) str += "...";
+    return [".binary", str];
   }
   var type = typeof val;
   if (type === "object") {
