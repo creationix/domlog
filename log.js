@@ -67,6 +67,11 @@ function toDom(val) {
       })
     );
   }
+  if (type === "string") {
+    val = JSON.stringify(val);
+    val = val.substr(1, val.length - 2);
+    return ["span.string", val];
+  }
   var title = "" + val;
   val = title.split("\n");
   if (val.length > 1) {
