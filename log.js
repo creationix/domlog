@@ -7,7 +7,7 @@ log.toDom = toDom;
 log.container = undefined;
 log.setup = setup;
 log.css =
-  ".log:hover{background:rgba(0,0,0,1);height:100%}\n" +
+  ".log:hover{background:rgba(0,0,0,1);height:100%;-webkit-user-select:text;}\n" +
   ".log{background:rgba(0,0,0,0.7);color:#ddd;font-family:monospace;padding:0;position:absolute;left:0;right:0;bottom:0;margin:0;height:200px;overflow:auto;transition:all 1s ease-in-out}\n" +
   ".log .array:after{content:']'}\n" +
   ".log .array:before{content:'['}\n" +
@@ -96,8 +96,8 @@ function setup(extra) {
   document.body.appendChild(log.container);
 }
 
-function item(val) {
-  if (typeof val === "string") return ["span.text", val];
+function item(val, i) {
+  if (!i && typeof val === "string") return ["span.text", val];
   return toDom(val);
 }
 
