@@ -1,7 +1,7 @@
 {
   "name": "domlog",
   "description": "A simple on-screen logger using dombuilder to create elements.",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "Tim Caswell <tim@creationix.com>",
   "main": "log.js",
   "dependencies": {

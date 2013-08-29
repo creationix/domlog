@@ -21,6 +21,7 @@ log.css =
   ".log .null{color:#aaa;font-weight:bold}\n" +
   ".log .number{color:#5cf}\n" +
   ".log .hidden{opacity:0.5}\n" +
+  ".log .obj-name{font-style:italic}\n" +
   ".log .object .key:after{content:':';font-weight:bold}\n" +
   ".log .object:after{content:'}'}\n" +
   ".log .object:before{content:'{'}\n" +
@@ -67,7 +68,9 @@ function toDom(val) {
   }
   var type = typeof val;
   if (type === "object") {
-    return ["dl.object"].concat(
+    var name = Object.prototype.toString.call(val);
+    name = name.substr(8, name.length - 9);
+    var obj = ["dl.object"].concat(
       keys(val).map(function (key) {
         return [
           ["dt", {class: val.hasOwnProperty(key) ? "key" : "key hidden" }, key],
@@ -75,6 +78,8 @@ function toDom(val) {
         ];
       })
     );
+    if (name === "Object") return obj;
+    return [["span.obj-name", name], obj];
   }
   if (type === "string") {
     val = JSON.stringify(val);
