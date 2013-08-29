@@ -20,6 +20,7 @@ log.css =
   ".log .function{color:#fb0}\n" +
   ".log .null{color:#aaa;font-weight:bold}\n" +
   ".log .number{color:#5cf}\n" +
+  ".log .hidden{opacity:0.5}\n" +
   ".log .object .key:after{content:':';font-weight:bold}\n" +
   ".log .object:after{content:'}'}\n" +
   ".log .object:before{content:'{'}\n" +
@@ -31,6 +32,14 @@ log.css =
   ".log .undefined{color:#aaa}\n" +
   ".log > li{padding:5px}\n" +
   ".log > li *{display:inline-block;margin:0 3px;padding:0}\n";
+
+function keys(obj) {
+  var data = [];
+  for (var key in obj) {
+    data.push(key);
+  }
+  return data;
+}
 
 function toDom(val) {
   if (val === null) {
@@ -59,9 +68,9 @@ function toDom(val) {
   var type = typeof val;
   if (type === "object") {
     return ["dl.object"].concat(
-      Object.keys(val).map(function (key) {
+      keys(val).map(function (key) {
         return [
-          ["dt.key", key],
+          ["dt", {class: val.hasOwnProperty(key) ? "key" : "key hidden" }, key],
           ["dd", toDom(val[key])]
         ];
       })
